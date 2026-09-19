@@ -2,58 +2,36 @@
 
 <div align="center">
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/MishraShardendu22/repo-transfer-engine)
-[![CI Status](https://github.com/MishraShardendu22/repo-transfer-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/MishraShardendu22/repo-transfer-engine/actions/workflows/ci.yml)
+[![Maintenance: Actively Maintained](https://img.shields.io/badge/Maintenance-Actively%20Maintained-brightgreen.svg)](#maintenance-sla--support)
+[![CI Quality Gate](https://github.com/MishraShardendu22/repo-transfer-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/MishraShardendu22/repo-transfer-engine/actions)
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
-[![Architecture: Microservices](https://img.shields.io/badge/Architecture-Microservices-blue.svg)](#conceptual-architecture)
-[![Frontend: Go Templ](https://img.shields.io/badge/Frontend-Go%20Templ-orange.svg)](https://templ.guide)
-[![Runtime: Go 1.25](https://img.shields.io/badge/Runtime-Go%201.25%2B-00ADD8?logo=go)](https://go.dev)
-
-<p align="center">
-  <b>High-throughput, fault-tolerant microservice platform engineered to orchestrate large-scale bulk repository migrations across GitHub user accounts and organizations with adaptive rate-limit auto-tuning.</b>
-</p>
+[![Architecture: Go Microservices](https://img.shields.io/badge/Architecture-Go%20Microservices-00ADD8?logo=go)](#conceptual-architecture)
+[![Frontend: Go Templ](https://img.shields.io/badge/Frontend-Go%20Templ-3b82f6)](#what-it-does)
 
 </div>
 
----
-
 > [!IMPORTANT]
-> **PROPRIETARY & CLOSED-SOURCE SPECIFICATION**
-> This repository serves as the official public product showcase, architectural specification, and capability documentation. The underlying source code, microservice binaries, concurrency engines, and rate-limit algorithms are strictly **closed source and proprietary**, owned by **Shardendu Mishra**.
-> Unauthorized duplication, reproduction, reverse engineering, or commercial imitation is prohibited under international intellectual property law.
+> **PROPRIETARY & CLOSED-SOURCE SOFTWARE**
+> This repository serves exclusively as a public product showcase and architectural specification. The underlying codebase, microservices, synchronization engine, and concurrency algorithms are strictly **closed source and proprietary**, owned by **Shardendu Mishra**.
+> Unauthorized duplication, reproduction, reverse engineering, or commercial imitation is strictly prohibited under international copyright laws.
 
 ---
 
-## Live Resources
+## Executive Summary
 
-- **Video Demonstration**: [YouTube Walkthrough](https://youtu.be/0Rhfgxg6YyE?si=IV2DMjMSYAom9KqA)
-- **Developer Portfolio**: [mishrashardendu22.is-a.dev](https://mishrashardendu22.is-a.dev)
-- **Security Policy**: [SECURITY.md](SECURITY.md)
-- **Commercial Licensing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
+The **Enterprise Repository Transfer Automation System** is a distributed, high-throughput microservice suite engineered to orchestrate large-scale, automated repository migrations across enterprise GitHub organizations and user accounts. 
 
----
-
-## Executive Overview
-
-Migrating dozens or hundreds of repositories between personal GitHub accounts and enterprise organizations typically requires tedious, manual UI confirmation or fragile, unthrottled shell scripts that quickly trigger GitHub's secondary rate limits (`403 Forbidden` / `429 Too Many Requests`).
-
-The **Enterprise Repository Transfer Automation System** solves this systemic operational risk by decoupling migration execution into independent, fault-tolerant microservices:
-1. **Interactive Web Dashboard**: Ultra-low latency, server-rendered interface built with Go and `templ` (zero Node.js runtime overhead).
-2. **Transfer Orchestrator REST API**: Manages OAuth 2.0 sessions, repository discovery, and queue dispatch.
-3. **Adaptive Execution Worker**: Employs exponential backoff with jitter, quota calculation, and secondary rate-limit auto-throttling.
+Engineered to solve the systemic operational risks of large-scale code migration, the system guarantees zero data loss, transaction verification, and automatic accommodation of GitHub REST API secondary rate limits.
 
 ---
 
-## Core Capabilities
+## What It Does
 
-| Capability | Specification | Enterprise Benefit |
-| :--- | :--- | :--- |
-| **Concurrent Batch Migration** | Channel-driven worker pool with configurable parallelism | Migrates 100+ repositories in minutes with zero manual UI clicks |
-| **Adaptive Rate-Limit Auto-Tuning** | Exponential backoff (2s base, factor 2, max 10s) with 10% random jitter | Prevents account abuse flags and GitHub API suspension |
-| **Zero-Token OAuth 2.0 Security** | Ephemeral, scoped OAuth token exchange with HttpOnly cookies | Eliminates persistent Personal Access Token (PAT) leaks |
-| **Compiled Type-Safe Frontend** | Server-rendered Go `templ` components with dark mode telemetry | Instant sub-millisecond page loads with zero browser bundle bloat |
-| **Dual Execution Modalities** | Persistent containerized web service or headless CI/CD CLI | Seamlessly integrates into automated DevOps & M&A migration pipelines |
-| **Cryptographic Audit Trail** | Granular per-repository status codes, target acceptance logs, and timestamps | Complete compliance transparency for enterprise audits |
+- **Automated Bulk Migration**: Automates the transfer of dozens or hundreds of repositories concurrently without manual intervention or individual UI confirmation.
+- **Adaptive Rate-Limit Auto-Throttling**: Continuously calculates GitHub REST API quotas and intelligently schedules transfer batches to prevent account abuse flags.
+- **Dynamic Session Security**: Integrates secure GitHub OAuth flows with zero permanent credential storage, ensuring secure delegated access.
+- **Real-Time Transfer Telemetry**: Streams transfer job progress, HTTP status responses, and target organization acceptance states.
+- **Go + Templ Web Dashboard**: Decouples API endpoints, execution queues, and server-rendered dashboards for ultra-low latency and zero runtime node_modules overhead.
 
 ---
 
@@ -61,46 +39,46 @@ The **Enterprise Repository Transfer Automation System** solves this systemic op
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│                 Go + Templ Web Dashboard                   │
+│                 High-Performance Web UI                     │
 │         (Compiled Type-Safe SSR Frontend /web)              │
 └───────────────┬─────────────────────────────┬───────────────┘
-                │ Form Actions / Fetch        │ Live Status Polling
+                │ REST API Commands           │ Telemetry Polling
                 ▼                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  Go Backend REST Server                     │
-│    (Fiber / Standard HTTP · Auth, Repos, Job Dispatch)      │
+│                 Transfer API Microservice                   │
+│       (Session Management · Batch Routing · Auditing)       │
 └───────────────┬─────────────────────────────────────────────┘
-                │ In-Memory / Channel Dispatch
+                │ Internal Channel Dispatch
                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                 Transfer Worker Engine                      │
-│   (Exponential Backoff · Rate Limiter · GitHub REST API)    │
+│                 Adaptive Execution Worker                   │
+│   (Quota Calculation · Jittered Retry · Rate Limiting)      │
 └───────────────┬─────────────────────────────────────────────┘
-                │ HTTPS (Personal Access Token / OAuth)
+                │ Authenticated HTTPS
                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    GitHub REST API v3                       │
-│        (POST /repos/{owner}/{repo}/transfer)                │
+│                 GitHub Enterprise Platform                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Benchmark Performance Targets
+## Maintenance, SLA & Support
 
-- **Throughput**: ~120 repository transfers per hour (fully rate-limit compliant).
-- **Frontend Latency**: < 5ms TTFB (Time-to-First-Byte) via compiled Go Templ.
-- **Memory Footprint**: < 25MB total RAM for backend and worker services.
-- **Failure Recovery**: 100% automatic recovery on transient `502` / `503` / `429` upstream errors.
+- **Active Maintenance**: Repository specifications, dependencies, and API conformity are monitored and updated continuously.
+- **Vulnerability Management**: Automated weekly security audits and dependency scans.
+- **Incident Response**: Enterprise clients under license receive 24/7 priority SLA support.
+
+For support, vulnerability disclosure, or integration inquiries, review [SECURITY.md](SECURITY.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-## Commercial Licensing & Enterprise Inquiries
+## Commercial Licensing & Inquiries
 
-Access to the proprietary implementation codebase, pre-built multi-arch Docker images (`linux/amd64`, `linux/arm64`), and automated deployment blueprints is provided exclusively under commercial agreement.
+Access to the proprietary source code, container images, and deployment runbooks is restricted to authorized partners and clients under signed commercial agreement.
 
 - **Author & Copyright Holder**: Shardendu Mishra
-- **Direct Email**: mishrashardendu22@gmail.com
+- **Email**: mishrashardendu22@gmail.com
 - **Website**: [mishrashardendu22.is-a.dev](https://mishrashardendu22.is-a.dev)
 - **GitHub Profile**: [@MishraShardendu22](https://github.com/MishraShardendu22)
 
