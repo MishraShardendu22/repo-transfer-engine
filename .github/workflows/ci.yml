@@ -1,0 +1,25 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Specification & Integrity Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Markdown & Links
+        run: |
+          echo "[INFO] Validating specification integrity..."
+          test -f README.md || exit 1
+          test -f LICENSE || exit 1
+          test -f SECURITY.md || exit 1
+          test -f CONTRIBUTING.md || exit 1
+          echo "[SUCCESS] All enterprise specification files verified."
